@@ -3,5 +3,15 @@
     "next/core-web-vitals",
     "next/typescript",
     "plugin:prettier/recommended"
-  ]
+  ],
+  "rules": {
+    // Type-only import을 강제하는 규칙
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "type-imports",
+        "fixStyle": "inline-type-imports"
+      }
+    ]
+  }
 }
