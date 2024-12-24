@@ -1,4 +1,4 @@
-export interface WeatherApiResponseItem {
+export interface GovernmentWeatherApiResponseItem {
   baseDate: string;
   baseTime: string;
   category: string;
@@ -9,11 +9,11 @@ export interface WeatherApiResponseItem {
   ny: number;
 }
 
-export interface WeatherApiResponse {
+export interface GovernmentWeatherApiResponse {
   response: {
     body: {
       items: {
-        item: WeatherApiResponseItem[];
+        item: GovernmentWeatherApiResponseItem[];
       };
     };
   };

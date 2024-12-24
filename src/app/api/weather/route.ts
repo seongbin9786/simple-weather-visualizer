@@ -1,9 +1,9 @@
 "use server";
 
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import {
   convertGeoCoordinatesToGridCoordinates,
-  WeatherApiResponse,
+  type GovernmentWeatherApiResponse,
   mapWeatherApiResponse,
 } from "@/features/weather";
 import { getTodayString } from "@/utils";
@@ -51,7 +51,8 @@ async function GET(req: NextRequest) {
     });
   }
 
-  const responseBody = (await weatherApiResponse.json()) as WeatherApiResponse;
+  const responseBody =
+    (await weatherApiResponse.json()) as GovernmentWeatherApiResponse;
   const allrawItems = responseBody.response.body.items.item;
   const todayRawItems = allrawItems.filter((item) => item.fcstDate === today);
   const result = mapWeatherApiResponse(todayRawItems);

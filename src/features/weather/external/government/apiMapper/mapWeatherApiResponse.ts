@@ -1,8 +1,10 @@
-import { WeatherApiResponseItem } from "../weatherApiType";
+import { type GovernmentWeatherApiResponseItem } from "../weatherApiType";
 
 import { groupByForecastTime, mapArrayToObject, mapForecastItem } from ".";
 
-export const mapWeatherApiResponse = (items: WeatherApiResponseItem[]) => {
+export const mapWeatherApiResponse = (
+  items: GovernmentWeatherApiResponseItem[],
+) => {
   const mappedItems = items.map(mapForecastItem);
   const groupedItems = groupByForecastTime(mappedItems);
   const groupedItemsAsObject = Object.entries(groupedItems).reduce(

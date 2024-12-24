@@ -1,6 +1,6 @@
 "use client";
 
-import { GeoCoordinates } from "@/types";
+import { type GeoCoordinates } from "@/types";
 import { useEffect, useState } from "react";
 
 export const useCurrentGeoCoordinates = () => {
@@ -8,7 +8,6 @@ export const useCurrentGeoCoordinates = () => {
     null,
   );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const isLoading = geoCoordinates === null;
   const isError = errorMessage !== null;
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -38,5 +37,7 @@ export const useCurrentGeoCoordinates = () => {
     );
   }, []);
 
-  return { geoCoordinates, isLoading, isError, errorMessage };
+  return geoCoordinates === null
+    ? { geoCoordinates: null, isLoading: true, isError, errorMessage }
+    : { geoCoordinates, isLoading: false, isError, errorMessage };
 };
