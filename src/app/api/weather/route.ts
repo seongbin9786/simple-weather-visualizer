@@ -1,10 +1,12 @@
 "use server";
 
 import { NextRequest, NextResponse } from "next/server";
-import { convertGeoCoordinatesToGridCoordinates } from "./coordinatesConverter";
-import { WeatherApiResponse } from "./weatherApiType";
-import { mapWeatherApiResponse } from "./weatherApiMapper";
-import { getTodayString } from "./getTodayString";
+import {
+  convertGeoCoordinatesToGridCoordinates,
+  WeatherApiResponse,
+  mapWeatherApiResponse,
+} from "@/features/weather";
+import { getTodayString } from "@/utils";
 
 const WEATHER_API_DOMAIN = "apis.data.go.kr/1360000/VilageFcstInfoService_2.0";
 
