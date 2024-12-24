@@ -1,7 +1,4 @@
-type Coordinates = {
-  latitude: number; // 위도
-  longitude: number; // 경도
-};
+import { GeoCoordinates } from "@/types";
 
 type GridCoordinates = {
   x: number; // 격자 X 좌표
@@ -11,7 +8,7 @@ type GridCoordinates = {
 export const convertGeoCoordinatesToGridCoordinates = ({
   latitude,
   longitude,
-}: Coordinates): GridCoordinates => {
+}: GeoCoordinates): GridCoordinates => {
   const RE = 6371.00877; // 지구 반경 (km)
   const GRID = 5.0; // 격자 간격 (km)
   const SLAT1 = 30.0; // 투영 위도1 (degree)

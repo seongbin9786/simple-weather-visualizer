@@ -1,10 +1,14 @@
 "use client";
 
-import { useCurrentGeolocation } from "@/hooks";
+import {
+  useCurrentGeoCoordinates,
+  useCurrentLocation,
+} from "@/features/geolocation/hooks";
 
 export default function Home() {
-  const { location, isLoading, isError, errorMessage } =
-    useCurrentGeolocation();
+  const { geoCoordinates, isLoading, isError, errorMessage } =
+    useCurrentGeoCoordinates();
+  const { currentLocation } = useCurrentLocation(geoCoordinates);
 
   return (
     <div>
@@ -13,13 +17,14 @@ export default function Home() {
       ) : isLoading ? (
         <p>현재 위치를 가져오는 중...</p>
       ) : (
-        <p>
+        <div>
           현재 위치:
           <ol>
-            <li>위도 {location?.latitude}</li>
-            <li>경도 {location?.longitude}</li>
+            <li>위도 {geoCoordinates?.latitude}</li>
+            <li>경도 {geoCoordinates?.longitude}</li>
+            <li>행정구역: {currentLocation}</li>
           </ol>
-        </p>
+        </div>
       )}
     </div>
   );
