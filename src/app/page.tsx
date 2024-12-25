@@ -85,17 +85,17 @@ export default function Home() {
           <h2 className="text-lg font-semibold text-gray-800">
             다른 지역 검색
           </h2>
-          <SearchBar<LocationWithGeoCoordinates>
+          <SearchBar
             nameFn={(item) => item.location}
             items={locationsWithGeocoordinates as LocationWithGeoCoordinates[]}
             renderItem={(item) => (
-              <SearchListItem<LocationWithGeoCoordinates>
+              <SearchListItem
                 key={item.location}
                 item={item}
                 name={item.location}
                 onClick={(item) => console.log(item)}
                 asideElement={
-                  <FavoriteToggleButton<LocationWithGeoCoordinates>
+                  <FavoriteToggleButton
                     item={item}
                     isToggled={false}
                     onToggle={addToFavorites}
@@ -116,7 +116,7 @@ export default function Home() {
                 key={item.location}
                 className="flex cursor-pointer items-center rounded-lg border border-gray-200 px-1 hover:bg-gray-200"
               >
-                <FavoriteToggleButton<LocationWithGeoCoordinates>
+                <FavoriteToggleButton
                   item={item}
                   isToggled={true}
                   onToggle={removeFromFavorites}
