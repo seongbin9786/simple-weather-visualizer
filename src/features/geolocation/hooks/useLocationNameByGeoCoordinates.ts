@@ -2,8 +2,10 @@ import { getLocationByGeoCoordinates } from "..";
 import { type GeoCoordinates } from "@/types";
 import { useEffect, useState } from "react";
 
-export const useCurrentLocation = (geoCoordinates: GeoCoordinates | null) => {
-  const [currentLocation, setCurrentLocation] = useState<string | null>(null);
+export const useLocationNameByGeoCoordinates = (
+  geoCoordinates: GeoCoordinates | null,
+) => {
+  const [locationName, setLocationName] = useState<string | null>(null);
 
   useEffect(() => {
     if (!geoCoordinates) {
@@ -12,9 +14,9 @@ export const useCurrentLocation = (geoCoordinates: GeoCoordinates | null) => {
 
     (async function () {
       const address = await getLocationByGeoCoordinates(geoCoordinates);
-      setCurrentLocation(address);
+      setLocationName(address);
     })();
   }, [geoCoordinates]);
 
-  return { currentLocation };
+  return { locationName };
 };

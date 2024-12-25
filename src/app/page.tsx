@@ -8,42 +8,52 @@ import {
 } from "@/components";
 import {
   useCurrentGeoCoordinates,
-  useCurrentLocation,
+  useLocationNameByGeoCoordinates,
 } from "@/features/geolocation";
 import locationsWithGeocoordinates from "@/assets/locations_with_geocoordinates.json";
 import { type LocationWithGeoCoordinates } from "@/assets/locations_with_geocoordinates.type";
-import { useFetch, useLocalStorageState } from "@/utils";
+import { useFetch } from "@/utils";
 import { getWeatherForGeoCoordinates } from "@/features/weather";
+import { useEffect, useState } from "react";
+import { type GeoCoordinates } from "@/types";
+
+import { useFavorites } from "./_modules";
 
 export default function Home() {
-  const { geoCoordinates, isLoading, isError, errorMessage } =
-    useCurrentGeoCoordinates();
-  const { currentLocation } = useCurrentLocation(geoCoordinates);
+  const {
+    geoCoordinates: myGeoCoordinates,
+    isLoading: myGeoCoordinatesIsLoading,
+    isError: myGeoCoordinatesIsError,
+    errorMessage: myGeoCoordinatesErrorMessage,
+  } = useCurrentGeoCoordinates();
+
+  const [selectedGeoCoordinates, setSelectedGeoCoordinates] =
+    useState<GeoCoordinates | null>(null);
+
+  useEffect(() => {
+    setSelectedGeoCoordinates(myGeoCoordinates);
+  }, [myGeoCoordinates]);
+
+  const { locationName } = useLocationNameByGeoCoordinates(
+    selectedGeoCoordinates,
+  );
 
   const { data: weatherData, isLoading: isWeahterApiLoading } = useFetch({
-    enabled: !!geoCoordinates,
-    fetchFn: () => getWeatherForGeoCoordinates(geoCoordinates!),
+    enabled: !!selectedGeoCoordinates,
+    fetchFn: () => getWeatherForGeoCoordinates(selectedGeoCoordinates!),
     onError: () => alert("날씨 정보를 가져오는 중 에러 발생"),
-    deps: [geoCoordinates],
+    deps: [selectedGeoCoordinates],
   });
 
-  const [favoriteLocations, setFavoriteLocations] = useLocalStorageState<
-    LocationWithGeoCoordinates[]
-  >("favoriteLocations", []);
+  const { favoriteLocations, toggleFavorite, checkIsToggled } = useFavorites();
 
-  const addToFavorites = (location: LocationWithGeoCoordinates) => {
-    setFavoriteLocations([...favoriteLocations, location]);
-  };
-
-  const removeFromFavorites = (location: LocationWithGeoCoordinates) => {
-    setFavoriteLocations(favoriteLocations.filter((item) => item !== location));
-  };
-
-  if (isError) {
-    return <p>에러 발생: {errorMessage}</p>;
+  if (myGeoCoordinatesIsError) {
+    return (
+      <p>현재 위치를 가져오는 도중 에러 발생: {myGeoCoordinatesErrorMessage}</p>
+    );
   }
 
-  if (isLoading) {
+  if (myGeoCoordinatesIsLoading) {
     return <p>현재 위치를 가져오는 중...</p>;
   }
 
@@ -55,9 +65,10 @@ export default function Home() {
     <div className="m-4 flex flex-col gap-8 rounded-md border border-gray-300 bg-gray-50 p-8">
       <h1 className="text-md text-gray-500">오늘의 날씨</h1>
       <div>
-        <h2 className="text-lg">{currentLocation}</h2>
+        <h2 className="text-lg">{locationName}</h2>
         <p className="text-gray-500">
-          위도: {geoCoordinates?.latitude}, 경도 {geoCoordinates?.longitude}
+          위도: {selectedGeoCoordinates?.latitude}, 경도:
+          {selectedGeoCoordinates?.longitude}
         </p>
       </div>
       <div className="flex gap-4">
@@ -73,12 +84,12 @@ export default function Home() {
                 key={item.location}
                 item={item}
                 name={item.location}
-                onClick={(item) => console.log(item)}
+                onClick={setSelectedGeoCoordinates}
                 asideElement={
                   <FavoriteToggleButton
                     item={item}
-                    isToggled={false}
-                    onToggle={addToFavorites}
+                    isToggled={checkIsToggled(item)}
+                    onToggle={toggleFavorite}
                   />
                 }
               />
@@ -95,11 +106,12 @@ export default function Home() {
               <li
                 key={item.location}
                 className="flex cursor-pointer items-center rounded-lg border border-gray-200 px-1 hover:bg-gray-200"
+                onClick={() => setSelectedGeoCoordinates(item)}
               >
                 <FavoriteToggleButton
                   item={item}
                   isToggled={true}
-                  onToggle={removeFromFavorites}
+                  onToggle={toggleFavorite}
                 />
                 <span>{item.location}</span>
               </li>
