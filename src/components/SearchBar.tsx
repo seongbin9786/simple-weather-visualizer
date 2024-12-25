@@ -1,16 +1,15 @@
-import { useState } from "react";
-import { SearchListItem } from "./SearchListItem";
+import { type ReactNode, useState } from "react";
 
 interface SearchProps<ItemProp extends object> {
   items: ItemProp[];
   nameFn: (item: ItemProp) => string;
-  onSelect: (item: ItemProp) => void;
+  renderItem: (item: ItemProp) => ReactNode;
 }
 
 export const SearchBar = <ItemProp extends object>({
   items,
   nameFn,
-  onSelect,
+  renderItem,
 }: SearchProps<ItemProp>) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const searchResult = items.filter((item) =>
@@ -33,14 +32,7 @@ export const SearchBar = <ItemProp extends object>({
           <div className="text-gray-accent2 pb-2">
             검색 결과 {searchResult.length}개
           </div>
-          {searchResult.map((item) => (
-            <SearchListItem<ItemProp>
-              key={nameFn(item)}
-              name={nameFn(item)}
-              item={item}
-              onClick={onSelect}
-            />
-          ))}
+          {searchResult.map(renderItem)}
         </div>
       )}
     </div>

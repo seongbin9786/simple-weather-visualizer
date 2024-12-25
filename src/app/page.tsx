@@ -1,14 +1,13 @@
 "use client";
 
-import { WeatherCard } from "@/components";
-import { SearchBar } from "@/components/SearchBar";
+import { useEffect, useState } from "react";
+import { SearchBar, SearchListItem, WeatherCard } from "@/components";
 import {
   useCurrentGeoCoordinates,
   useCurrentLocation,
 } from "@/features/geolocation/hooks";
 import { type GeoCoordinates } from "@/types";
 import { type WeatherApiResponse } from "@/types/api";
-import { useEffect, useState } from "react";
 import locationsWithGeocoordinates from "@/assets/locations_with_geocoordinates.json";
 import { type LocationWithGeoCoordinates } from "@/assets/locations_with_geocoordinates.type";
 
@@ -69,9 +68,16 @@ export default function Home() {
             다른 지역 검색
           </h2>
           <SearchBar<LocationWithGeoCoordinates>
-            onSelect={(item) => console.log(item)}
             nameFn={(item) => item.location}
             items={locationsWithGeocoordinates as LocationWithGeoCoordinates[]}
+            renderItem={(item) => (
+              <SearchListItem<LocationWithGeoCoordinates>
+                key={item.location}
+                item={item}
+                onClick={(item) => console.log(item)}
+                name={item.location}
+              />
+            )}
           />
         </div>
         <div className="flex-1 flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-lg">
