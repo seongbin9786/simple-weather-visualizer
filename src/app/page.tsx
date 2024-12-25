@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SearchBar, SearchListItem, WeatherCard } from "@/components";
+import {
+  FavoriteToggleButton,
+  SearchBar,
+  SearchListItem,
+  WeatherCard,
+} from "@/components";
 import {
   useCurrentGeoCoordinates,
   useCurrentLocation,
@@ -19,6 +24,24 @@ const getWeatherForGeoCoordinates = async (
   );
   return response.json();
 };
+
+const EXAMPLE_FAVORITE_PLACES = [
+  {
+    location: "서울특별시",
+    latitude: 37.5666103,
+    longitude: 126.9783882,
+  },
+  {
+    location: "서울특별시 동대문구",
+    latitude: 37.574524,
+    longitude: 127.03965,
+  },
+  {
+    location: "세종특별자치시",
+    latitude: 36.4803512,
+    longitude: 127.2894325,
+  },
+];
 
 export default function Home() {
   const { geoCoordinates, isLoading, isError, errorMessage } =
@@ -74,20 +97,37 @@ export default function Home() {
               <SearchListItem<LocationWithGeoCoordinates>
                 key={item.location}
                 item={item}
-                onClick={(item) => console.log(item)}
                 name={item.location}
+                onClick={(item) => console.log(item)}
+                asideElement={
+                  <FavoriteToggleButton<LocationWithGeoCoordinates>
+                    item={item}
+                    isToggled={false}
+                    onToggle={(item) => console.log("toggle:", item)}
+                  />
+                }
               />
             )}
           />
         </div>
-        <div className="flex-1 flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-lg">
+        <div className="flex flex-1 flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-lg">
           <h2 className="text-lg font-semibold text-gray-800">
             즐겨 찾는 장소
           </h2>
-          <ul className="list-inside list-disc">
-            <li>서울특별시</li>
-            <li>서울특별시 동대문구</li>
-            <li>세종특별자치시</li>
+          <ul className="flex flex-col gap-2">
+            {EXAMPLE_FAVORITE_PLACES.map((item) => (
+              <li
+                key={item.location}
+                className="flex cursor-pointer items-center rounded-lg border border-gray-200 px-1 hover:bg-gray-200"
+              >
+                <FavoriteToggleButton<LocationWithGeoCoordinates>
+                  item={item}
+                  isToggled={true}
+                  onToggle={(item) => console.log("toggle:", item)}
+                />
+                <span>{item.location}</span>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
