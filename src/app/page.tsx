@@ -1,6 +1,7 @@
 "use client";
 
 import { WeatherCard } from "@/components";
+import { SearchBar } from "@/components/SearchBar";
 import {
   useCurrentGeoCoordinates,
   useCurrentLocation,
@@ -8,6 +9,8 @@ import {
 import { type GeoCoordinates } from "@/types";
 import { type WeatherApiResponse } from "@/types/api";
 import { useEffect, useState } from "react";
+import locationsWithGeocoordinates from "@/assets/locations_with_geocoordinates.json";
+import { type LocationWithGeoCoordinates } from "@/assets/locations_with_geocoordinates.type";
 
 const getWeatherForGeoCoordinates = async (
   geoCoordinates: GeoCoordinates,
@@ -65,9 +68,10 @@ export default function Home() {
           <h2 className="text-lg font-semibold text-gray-800">
             다른 지역 검색
           </h2>
-          <input
-            type="text"
-            className="w-1/2 rounded-md border border-gray-200 px-2 py-1"
+          <SearchBar<LocationWithGeoCoordinates>
+            onSelect={(item) => console.log(item)}
+            nameFn={(item) => item.location}
+            items={locationsWithGeocoordinates as LocationWithGeoCoordinates[]}
           />
         </div>
         <div className="flex-1 flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-lg">
