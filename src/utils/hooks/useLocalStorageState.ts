@@ -15,6 +15,10 @@ export const useLocalStorageState = <StateType>(
   );
 
   const [localState, setLocalState] = useState<StateType>(() => {
+    if (typeof window === "undefined") {
+      return initialValue;
+    }
+
     const loadedFromStorage = loadFromStorage();
     if (!loadedFromStorage) {
       window.localStorage.setItem(key, JSON.stringify(initialValue));
