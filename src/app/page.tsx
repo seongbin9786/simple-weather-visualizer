@@ -15,6 +15,7 @@ import { type GeoCoordinates } from "@/types";
 import { type WeatherApiResponse } from "@/types/api";
 import locationsWithGeocoordinates from "@/assets/locations_with_geocoordinates.json";
 import { type LocationWithGeoCoordinates } from "@/assets/locations_with_geocoordinates.type";
+import { useLocalStorageState } from "@/utils";
 
 const getWeatherForGeoCoordinates = async (
   geoCoordinates: GeoCoordinates,
@@ -24,24 +25,6 @@ const getWeatherForGeoCoordinates = async (
   );
   return response.json();
 };
-
-const EXAMPLE_FAVORITE_PLACES = [
-  {
-    location: "서울특별시",
-    latitude: 37.5666103,
-    longitude: 126.9783882,
-  },
-  {
-    location: "서울특별시 동대문구",
-    latitude: 37.574524,
-    longitude: 127.03965,
-  },
-  {
-    location: "세종특별자치시",
-    latitude: 36.4803512,
-    longitude: 127.2894325,
-  },
-];
 
 export default function Home() {
   const { geoCoordinates, isLoading, isError, errorMessage } =
@@ -67,6 +50,18 @@ export default function Home() {
       }
     })();
   }, [geoCoordinates]);
+
+  const [favoriteLocations, setFavoriteLocations] = useLocalStorageState<
+    LocationWithGeoCoordinates[]
+  >("favoriteLocations", []);
+
+  const addToFavorites = (location: LocationWithGeoCoordinates) => {
+    setFavoriteLocations([...favoriteLocations, location]);
+  };
+
+  const removeFromFavorites = (location: LocationWithGeoCoordinates) => {
+    setFavoriteLocations(favoriteLocations.filter((item) => item !== location));
+  };
 
   if (isError) {
     return <p>에러 발생: {errorMessage}</p>;
@@ -103,7 +98,7 @@ export default function Home() {
                   <FavoriteToggleButton<LocationWithGeoCoordinates>
                     item={item}
                     isToggled={false}
-                    onToggle={(item) => console.log("toggle:", item)}
+                    onToggle={addToFavorites}
                   />
                 }
               />
@@ -111,11 +106,12 @@ export default function Home() {
           />
         </div>
         <div className="flex flex-1 flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-lg">
-          <h2 className="text-lg font-semibold text-gray-800">
-            즐겨 찾는 장소
-          </h2>
-          <ul className="flex flex-col gap-2">
-            {EXAMPLE_FAVORITE_PLACES.map((item) => (
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-lg font-semibold text-gray-800">즐겨 찾기</h2>
+            <span className="text-gray-500">{favoriteLocations.length}곳</span>
+          </div>
+          <ul className="flex max-h-52 flex-col gap-2 overflow-y-auto">
+            {favoriteLocations.map((item) => (
               <li
                 key={item.location}
                 className="flex cursor-pointer items-center rounded-lg border border-gray-200 px-1 hover:bg-gray-200"
@@ -123,7 +119,7 @@ export default function Home() {
                 <FavoriteToggleButton<LocationWithGeoCoordinates>
                   item={item}
                   isToggled={true}
-                  onToggle={(item) => console.log("toggle:", item)}
+                  onToggle={removeFromFavorites}
                 />
                 <span>{item.location}</span>
               </li>
