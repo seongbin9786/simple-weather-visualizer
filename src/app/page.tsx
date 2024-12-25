@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   FavoriteToggleButton,
   SearchBar,
@@ -10,46 +9,23 @@ import {
 import {
   useCurrentGeoCoordinates,
   useCurrentLocation,
-} from "@/features/geolocation/hooks";
-import { type GeoCoordinates } from "@/types";
-import { type WeatherApiResponse } from "@/types/api";
+} from "@/features/geolocation";
 import locationsWithGeocoordinates from "@/assets/locations_with_geocoordinates.json";
 import { type LocationWithGeoCoordinates } from "@/assets/locations_with_geocoordinates.type";
-import { useLocalStorageState } from "@/utils";
-
-const getWeatherForGeoCoordinates = async (
-  geoCoordinates: GeoCoordinates,
-): Promise<Record<string, WeatherApiResponse>> => {
-  const response = await fetch(
-    `/api/weather?latitude=${geoCoordinates.latitude}&longitude=${geoCoordinates.longitude}`,
-  );
-  return response.json();
-};
+import { useFetch, useLocalStorageState } from "@/utils";
+import { getWeatherForGeoCoordinates } from "@/features/weather";
 
 export default function Home() {
   const { geoCoordinates, isLoading, isError, errorMessage } =
     useCurrentGeoCoordinates();
   const { currentLocation } = useCurrentLocation(geoCoordinates);
 
-  const [weatherData, setWeatherData] = useState<Record<
-    string,
-    WeatherApiResponse
-  > | null>(null);
-
-  useEffect(() => {
-    if (!geoCoordinates) {
-      return;
-    }
-
-    (async function () {
-      try {
-        const weatherData = await getWeatherForGeoCoordinates(geoCoordinates);
-        setWeatherData(weatherData);
-      } catch (error) {
-        console.error("날씨 정보를 가져오는 중 에러 발생:", error);
-      }
-    })();
-  }, [geoCoordinates]);
+  const { data: weatherData, isLoading: isWeahterApiLoading } = useFetch({
+    enabled: !!geoCoordinates,
+    fetchFn: () => getWeatherForGeoCoordinates(geoCoordinates!),
+    onError: () => alert("날씨 정보를 가져오는 중 에러 발생"),
+    deps: [geoCoordinates],
+  });
 
   const [favoriteLocations, setFavoriteLocations] = useLocalStorageState<
     LocationWithGeoCoordinates[]
@@ -69,6 +45,10 @@ export default function Home() {
 
   if (isLoading) {
     return <p>현재 위치를 가져오는 중...</p>;
+  }
+
+  if (isWeahterApiLoading) {
+    return <p>날씨 정보를 가져오는 중...</p>;
   }
 
   return (
