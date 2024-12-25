@@ -1,5 +1,5 @@
 import { getKakaoGeocoderSDK } from "..";
-import { GeoCoordinates } from "@/types";
+import { type GeoCoordinates } from "@/types";
 
 export const getLocationByGeoCoordinates = async ({
   latitude,

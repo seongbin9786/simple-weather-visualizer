@@ -1,5 +1,5 @@
 import { getLocationByGeoCoordinates } from "..";
-import { GeoCoordinates } from "@/types";
+import { type GeoCoordinates } from "@/types";
 import { useEffect, useState } from "react";
 
 export const useCurrentLocation = (geoCoordinates: GeoCoordinates | null) => {

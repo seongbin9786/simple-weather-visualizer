@@ -1,4 +1,4 @@
-import { KakaoGeocoder } from "./kakao";
+import { type KakaoGeocoder } from "./kakao";
 
 const getSDKUrl = (accessKey: string) => {
   const isHttps = window.location.href.includes("https");

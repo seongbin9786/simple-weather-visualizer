@@ -1,4 +1,4 @@
-import { GeoCoordinates } from "@/types";
+import { type GeoCoordinates } from "@/types";
 
 type GridCoordinates = {
   x: number; // 격자 X 좌표
