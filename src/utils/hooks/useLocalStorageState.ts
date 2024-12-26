@@ -29,17 +29,24 @@ export const useLocalStorageState = <StateType>(
   const setValue = (value: StateType) => {
     setLocalState(value);
     window.localStorage.setItem(key, JSON.stringify(value));
+    window.dispatchEvent(new CustomEvent("localStorageChange")); // NOTE: 같은 탭에서의 setItem에 대해서는 storage 이벤트가 발생하지 않으므로 커스텀 이벤트를 활용
   };
 
   useEffect(() => {
     const updateValueOnStorageUpdate = () => {
+      console.log("update happened!");
       setLocalState(loadFromStorage() || initialValue);
     };
 
     window.addEventListener("storage", updateValueOnStorageUpdate);
+    window.addEventListener("localStorageChange", updateValueOnStorageUpdate);
 
     return () => {
       window.removeEventListener("storage", updateValueOnStorageUpdate);
+      window.removeEventListener(
+        "localStorageChange",
+        updateValueOnStorageUpdate,
+      );
     };
   }, [key, initialValue, loadFromStorage]);
 
