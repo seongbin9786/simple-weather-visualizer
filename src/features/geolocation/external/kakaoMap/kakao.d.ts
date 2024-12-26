@@ -30,3 +30,8 @@ export interface KakaoCoord2RegionCodeResult {
   region_type: string;
   address_name: string;
 }
+
+export enum KakaoMapRegionType {
+  법정동 = "B",
+  행정동 = "H",
+}

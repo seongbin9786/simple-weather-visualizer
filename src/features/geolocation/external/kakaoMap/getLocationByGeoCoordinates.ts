@@ -1,5 +1,6 @@
 import { getKakaoGeocoderSDK } from "..";
 import { type GeoCoordinates } from "@/types";
+import { KakaoMapRegionType } from "./kakao.d";
 
 export const getLocationByGeoCoordinates = async ({
   latitude,
@@ -20,7 +21,7 @@ export const getLocationByGeoCoordinates = async ({
         reject("카카오 API가 정상 동작하지 않습니다.");
       }
       for (const item of searchResult) {
-        if (item.region_type === "H") {
+        if (item.region_type === KakaoMapRegionType.법정동) {
           resolve(item.address_name);
           return;
         }
