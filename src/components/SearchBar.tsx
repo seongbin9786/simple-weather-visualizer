@@ -27,7 +27,7 @@ export const SearchBar = <ItemProp extends object>({
         onFocus={() => setHasFocus(true)}
         onBlur={() => setTimeout(() => setHasFocus(false), 100)} // NOTE: 검색어가 없는 상태라면 blur 시 즉시 사라지므로, onSelect가 호출될 수 있는 시간이 필요
       />
-      {(searchQuery.length > 0 || hasFocus) && (
+      {hasFocus && (
         <div className="absolute left-0 top-[46px] max-h-52 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white p-4">
           <div className="text-gray-accent2 pb-2">
             검색 결과 {searchResult.length}개
