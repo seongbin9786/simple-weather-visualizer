@@ -14,13 +14,15 @@
     "next": "14.2.21",
     "react": "^18",
     "react-dom": "^18",
-    "react-icons": "^5.4.0"
+    "react-icons": "^5.4.0",
+    "react-window": "^1.8.11"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-window": "^1.8.8",
     "eslint": "^8",
     "eslint-config-next": "14.2.21",
     "eslint-config-prettier": "^9.1.0",
