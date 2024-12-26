@@ -1,11 +1,8 @@
 "use client";
 
-import {
-  FavoriteToggleButton,
-  SearchBar,
-  SearchListItem,
-  WeatherCard,
-} from "@/components";
+import { useEffect, useState } from "react";
+import { FixedSizeList } from "react-window";
+import { FavoriteToggleButton, SearchBar, SearchListItem } from "@/components";
 import {
   useCurrentGeoCoordinates,
   useLocationNameByGeoCoordinates,
@@ -14,11 +11,9 @@ import locationsWithGeocoordinates from "@/assets/locations_with_geocoordinates.
 import { type LocationWithGeoCoordinates } from "@/assets/locations_with_geocoordinates.type";
 import { useFetch } from "@/utils";
 import { getWeatherForGeoCoordinates } from "@/features/weather";
-import { useEffect, useState } from "react";
 import { type GeoCoordinates } from "@/types";
 
-import { useFavorites } from "./_modules";
-import { FixedSizeList } from "react-window";
+import { useFavorites, WeatherCard } from "./_modules";
 
 export default function Home() {
   const {
