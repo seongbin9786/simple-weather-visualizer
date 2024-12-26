@@ -137,13 +137,11 @@ export default function Home() {
           </ul>
         </div>
       </div>
-      {weatherData && (
       <div className="flex flex-row space-x-4 overflow-x-auto">
         {Object.entries(weatherData).map(([hour, weather]) => (
           <WeatherCard key={hour} hour={hour} weather={weather} />
         ))}
       </div>
-      )}
     </div>
   );
 }

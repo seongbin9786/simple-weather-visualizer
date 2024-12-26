@@ -42,6 +42,6 @@ export const useFetch = <ResultType>({
   }, [enabled, ...deps]);
 
   return fetchResult === undefined
-    ? { data: undefined, isLoading: true }
-    : { data: fetchResult, isLoading: false };
+    ? ({ data: undefined, isLoading: true } as const)
+    : ({ data: fetchResult, isLoading: false } as const);
 };
