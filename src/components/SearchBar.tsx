@@ -3,13 +3,13 @@ import { type ReactNode, useState } from "react";
 interface SearchProps<ItemProp extends object> {
   items: ItemProp[];
   nameFn: (item: ItemProp) => string;
-  renderItem: (item: ItemProp) => ReactNode;
+  renderResult: (searchResult: ItemProp[]) => ReactNode;
 }
 
 export const SearchBar = <ItemProp extends object>({
   items,
   nameFn,
-  renderItem,
+  renderResult,
 }: SearchProps<ItemProp>) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const searchResult = items.filter((item) =>
@@ -28,11 +28,11 @@ export const SearchBar = <ItemProp extends object>({
         onBlur={() => setTimeout(() => setHasFocus(false), 100)} // NOTE: 검색어가 없는 상태라면 blur 시 즉시 사라지므로, onSelect가 호출될 수 있는 시간이 필요
       />
       {hasFocus && (
-        <div className="absolute left-0 top-[46px] max-h-52 w-full overflow-y-auto rounded-lg border border-gray-200 bg-white p-4">
+        <div className="absolute left-0 top-[46px] w-full rounded-lg border border-gray-200 bg-white p-4">
           <div className="text-gray-accent2 pb-2">
             검색 결과 {searchResult.length}개
           </div>
-          {searchResult.map(renderItem)}
+          {renderResult(searchResult)}
         </div>
       )}
     </div>

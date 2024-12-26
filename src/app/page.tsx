@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { type GeoCoordinates } from "@/types";
 
 import { useFavorites } from "./_modules";
+import { FixedSizeList } from "react-window";
 
 export default function Home() {
   const {
@@ -79,20 +80,34 @@ export default function Home() {
           <SearchBar
             nameFn={(item) => item.location}
             items={locationsWithGeocoordinates as LocationWithGeoCoordinates[]}
-            renderItem={(item) => (
-              <SearchListItem
-                key={item.location}
-                item={item}
-                name={item.location}
-                onClick={setSelectedGeoCoordinates}
-                asideElement={
-                  <FavoriteToggleButton
-                    item={item}
-                    isToggled={checkIsToggled(item)}
-                    onToggle={toggleFavorite}
-                  />
-                }
-              />
+            renderResult={(searchResult) => (
+              <FixedSizeList
+                itemKey={(index) => searchResult[index].location}
+                width="100%"
+                height={150}
+                itemCount={searchResult.length}
+                itemSize={65}
+              >
+                {({ index, style: reactWindowStyle }) => {
+                  const item = searchResult[index];
+                  return (
+                    <SearchListItem
+                      style={reactWindowStyle}
+                      key={item.location}
+                      item={item}
+                      name={item.location}
+                      onClick={setSelectedGeoCoordinates}
+                      asideElement={
+                        <FavoriteToggleButton
+                          item={item}
+                          isToggled={checkIsToggled(item)}
+                          onToggle={toggleFavorite}
+                        />
+                      }
+                    />
+                  );
+                }}
+              </FixedSizeList>
             )}
           />
         </div>
