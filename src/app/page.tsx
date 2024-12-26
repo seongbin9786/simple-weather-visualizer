@@ -2,7 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { FixedSizeList } from "react-window";
-import { FavoriteToggleButton, SearchBar, SearchListItem } from "@/components";
+import {
+  FavoriteToggleButton,
+  FullPageSpinner,
+  SearchBar,
+  SearchListItem,
+  FullPageErrorMessage,
+} from "@/components";
 import {
   useCurrentGeoCoordinates,
   useLocationNameByGeoCoordinates,
@@ -45,16 +51,18 @@ export default function Home() {
 
   if (myGeoCoordinatesIsError) {
     return (
-      <p>현재 위치를 가져오는 도중 에러 발생: {myGeoCoordinatesErrorMessage}</p>
+      <FullPageErrorMessage
+        description={`현재 위치를 가져오는 도중 에러가 발생했습니다. 다시 시도해주세요.\n사유: ${myGeoCoordinatesErrorMessage}`}
+      />
     );
   }
 
   if (myGeoCoordinatesIsLoading) {
-    return <p>현재 위치를 가져오는 중...</p>;
+    return <FullPageSpinner description="현재 위치를 가져오는 중..." />;
   }
 
   if (isWeahterApiLoading) {
-    return <p>날씨 정보를 가져오는 중...</p>;
+    return <FullPageSpinner description="날씨 정보를 가져오는 중..." />;
   }
 
   return (
@@ -130,11 +138,11 @@ export default function Home() {
         </div>
       </div>
       {weatherData && (
-        <div className="flex flex-row space-x-4 overflow-x-auto">
-          {Object.entries(weatherData).map(([hour, weather]) => (
-            <WeatherCard key={hour} hour={hour} weather={weather} />
-          ))}
-        </div>
+      <div className="flex flex-row space-x-4 overflow-x-auto">
+        {Object.entries(weatherData).map(([hour, weather]) => (
+          <WeatherCard key={hour} hour={hour} weather={weather} />
+        ))}
+      </div>
       )}
     </div>
   );
