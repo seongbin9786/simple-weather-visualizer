@@ -44,8 +44,6 @@ async function GET(req: NextRequest) {
   const weatherApiResponse = await fetch(url);
 
   if (!weatherApiResponse.ok) {
-    const body = await weatherApiResponse.text();
-    console.log("error:", body);
     return new Response("날씨 API 서버에서 데이터를 가져오는데 실패했습니다.", {
       status: 500,
     });

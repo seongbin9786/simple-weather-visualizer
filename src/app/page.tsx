@@ -39,7 +39,10 @@ export default function Home() {
   const { data: weatherData, isLoading: isWeahterApiLoading } = useFetch({
     enabled: !!selectedGeoCoordinates,
     fetchFn: () => getWeatherForGeoCoordinates(selectedGeoCoordinates!),
-    onError: () => alert("날씨 정보를 가져오는 중 에러 발생"),
+    onError: () => {
+      alert("기상청 API 호출에 실패했습니다. 다시 시도해주세요."); // NOTE: 기상청 API 호출 실패는 사용자가 해결할 수 없는 오류
+      window.location.reload(); // NOTE: 페이지 리프레시 수행
+    },
     deps: [selectedGeoCoordinates],
   });
 

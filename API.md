@@ -94,7 +94,6 @@ if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
     (position) => {
       const { latitude, longitude } = position.coords;
-      console.log(`위도: ${latitude}, 경도: ${longitude}`);
     },
     (error) => {
       switch (error.code) {
@@ -122,7 +121,6 @@ if (navigator.geolocation) {
 - https://apis.map.kakao.com/web/sample/coord2addr/
 
 ```js
-const map = new kakao.maps.Map(mapContainer, mapOption);
 const geocoder = new kakao.maps.services.Geocoder();
 
 geocoder.coord2RegionCode(

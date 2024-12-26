@@ -34,7 +34,6 @@ export const useLocalStorageState = <StateType>(
 
   useEffect(() => {
     const updateValueOnStorageUpdate = () => {
-      console.log("update happened!");
       setLocalState(loadFromStorage() || initialValue);
     };
 
